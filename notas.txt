@@ -1,0 +1,7 @@
+event emitter
+const EventEmitter = require('events');
+const emisorProductos = new EventEmitter();
+
+emisorProductos.on('compra',()=>{
+  console.log('Se ha realizado una compra');
+});
