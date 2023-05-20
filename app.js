@@ -3,7 +3,7 @@ const sql = require('mssql');
 const { pool, dbConnect } = require('./config/db');
 const routerReserva = require('./routes/reserva');
 const path = require('path');
-
+//constante de port
 const app = express();
 const port = process.env.PORT || 3000;
 //middleware
