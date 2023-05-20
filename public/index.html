@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+        integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.css"
+        integrity="sha512-OTcub78R3msOCtY3Tc6FzeDJ8N9qvQn1Ph49ou13xgA9VsH9+LRxoFU6EqLhW4+PKRfU+/HReXmSZXHEkpYoOA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <header>
+        <div class="logo">HOTEL EL HORIZONTE DEL LLANO</div>
+        <div class="menu-button">&#9776;</div>
+    </header>
+    <section class="hero">
+        <div class="hero-content">
+            <h1>ATREVÉTE A VIVIR UNA EXPERIENCIA INOLVIDABLE</h1>
+            <p>Estamos Ubicados en el Municipio de Acacías,Tu lugar ideal <br>
+                para desconectarte de la ciudad y disfrutar de un merecido...</p>
+        </div>
+    </section>
+    <div class="wrapper">
+        <div class="owl-carousel">
+            <div class="item">
+                <img src="assets/hotel1.jpg" alt="" srcset="">
+                <h4>Junior Suite</h4>
+                <p>La junior suite es una opción de alojamiento lujosa y espaciosa en nuestro hotel. Diseñada para
+                    brindar comodidad y elegancia, esta suite ofrece un ambiente acogedor y relajante para los huéspedes
+                    que buscan una experiencia de hospedaje de primera clase.</p>
+            </div>
+            <div class="item">
+                <img src="assets/hotel2.jpg" alt="" srcset="">
+                <h4>Suite presidencial</h4>
+                <p>La suite presidencial es el pináculo del lujo y el confort en nuestro hotel. Diseñada para satisfacer
+                    las demandas más exclusivas de los huéspedes, esta suite ofrece un ambiente sumamente elegante y
+                    sofisticado, con atención meticulosa a cada detalle.</p>
+            </div>
+            <div class="item">
+                <img src="assets/hotel3.jpg" alt="" srcset="">
+                <h4>Normal Suite</h4>
+                <p>La suite normal es una opción cómoda y funcional para aquellos huéspedes que buscan un alojamiento
+                    espacioso y confortable en nuestro hotel.</p>
+                <p></p>
+            </div>
+        </div>
+        <p style="text-align: center;">
+            <a class="btn" href="/add-reservas">¡Reserva ya!</a>
+
+        </p>
+        <h2 style="text-align: center;">
+            ¡Conoce más sobre nosotros!
+        </h2>
+        <div class="columns">
+            <div style="background-image: url('assets/hotel_main.jpg');">
+                <section class="center">
+                    <p class="title-column">Hotel</p>
+                    <button>Ver más</button>
+                </section>
+            </div>
+            <div style="background-image: url('assets/servicios_adicionales.png');">
+                <section class="center">
+                    <p class="title-column">Servicios <br> adicionales</p>
+                    <button>Ver más</button>
+                </section>
+            </div>
+            <div style="background-image: url('assets/reservas.png');">
+                <section class="center">
+                    <p class="title-column">Reservas</p>
+                    <button>Ver más</button>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
+        integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+        integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        $('.owl-carousel').owlCarousel({
+            loop: true,
+            margin: 50,
+            nav: true,
+            autoplay: true,
+            autoplayTimeout: 3000
+        })
+    </script>
+</body>
+
+</html>

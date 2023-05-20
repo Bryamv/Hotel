@@ -1,0 +1,22 @@
+validar camas disponibles ordinarias. hecho
+
+1. 10 habitaciones de uso compartido y cada habitacion tiene 4-5 camas individales
+2. se debe acomodar a los huespedes de forma que se acomoden entre las 10 habitaciones de uso compartido hecho
+
+3. la fecha fin no puede ser menor a la fecha inicio
+
+4. si la habitacion es compatida no puede escoger tipo de camas(default individual)
+
+5. validar los cupos en el servicios por cada fecha en el rango de fechas reservado
+
+ejemplo:
+reserva de 15/10/2021 al 20/10/2021 con cena y almuerzo
+validar que 15 hay cupo, el 16 y así. si en alguno de esos dias no hay cupo informar cual dia no hay cupo
+
+6. validar que no haya paro armado en las fechas seleccionas
+
+7. validar que hay camas disponibles en las habitaciones seleccionadas
+
+8. calcular el precio total de la reserva
+9. generar el codigo de confirmacion de la reserva
+
