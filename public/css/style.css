@@ -1,0 +1,198 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f2f2f2;
+}
+
+.logo {
+  font-size: 24px;
+  font-family: monospace;
+  font-weight: bold;
+}
+
+.menu-button {
+  font-size: 24px;
+  cursor: pointer;
+}
+.hero {
+  background-image: url("../assets/hero.png");
+  background-size: cover;
+  background-position: center;
+  height: 400px;
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  padding: 10px;
+}
+
+.hero-content {
+  text-align: center;
+  color: black;
+  padding: 20px;
+  background: rgba(156,166,255,0.7);
+  border: 2px solid rgba(255,255,255,0.5);
+  border-radius: 5px;
+}
+
+.hero-content h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.hero-content p {
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+.wrapper {
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+}
+.btn {
+    padding: 10px;
+    color: white;
+    font-weight: bold;
+    background: blue;
+    cursor: pointer;
+}
+.item img {
+    border: 5px solid rgba(156,166,255);
+}
+.columns {
+    display: flex;
+    gap: 30px;
+}
+.columns div {
+    flex: 33.33%;
+    height: 200px;
+    border: 5px solid rgba(156,166,255);
+    background-size: cover;
+    background-position: center;
+}
+.title-column {
+    background: rgba(0,0,0,0.5);
+    border: 2px solid rgba(127,127,127,0.5);
+    border-radius: 5px;
+    color: white;
+    width: fit-content;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+.main {
+    background-image: url('../assets/hotel_main.png');
+    background-position: center;
+    background-size: cover;
+    padding: 10px;
+}
+.main h3 {
+    margin:0;
+}
+hr {
+    border: 3px solid black;
+}
+.center {
+    display: grid;
+    justify-content: center;
+    align-items:center;
+    height: 100%;
+}
+.primertitulo{
+    margin: 40px;
+}
+
+.imagen1{   
+    margin-left: 60px;
+    padding-top: 0px;
+    height: 20%;
+    width: 20%;
+    border: 5px solid rgba(156,166,255);
+}
+
+.selecciones{
+    margin-left: 200px;
+    display: inline-block;
+}
+
+
+.casillas{
+    margin-bottom: 50px;
+}
+
+.check{
+    margin: 20px 180px;
+    display: inline-block;    
+}
+
+.input{
+    display: block;
+    margin-left: 180px;
+    margin-right: 180px;
+    margin-bottom: 20px;
+}
+
+.input-servicios{
+    display: inline-block;
+    margin-right: 80px;
+}
+
+.numhuespedes{
+    display: inline-block;
+}
+
+.label{
+    margin-top: 80px;
+    margin-left: 180px;
+}
+
+#numero {
+    width: 220px;
+}
+
+.input2{
+    display: inline-block;
+    margin-left: 50px;
+}
+
+
+.restaurante{
+    margin-left: 40px;
+}
+
+.servicios{
+    margin-left: 180px;
+}
+
+.enviar{
+    margin-left: 350px;
+    margin-top: 50px;
+    width: 40%;
+    padding: 15px 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background: gray;
+    border: none;
+    border-radius: 5px;
+    transition: 0.5s all;
+    cursor: pointer;
+}
+
+.enviar:hover{
+    background: rgb(29, 28, 28);
+    transform: scale(1.1);
+}
+fieldset {
+    border: 0px solid transparent;
+}
+.casillas select {
+    width: 100%;
+}

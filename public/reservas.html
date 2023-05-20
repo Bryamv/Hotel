@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Reservar</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="main" style="border: 5px solid rgba(156,166,255);">
+            <form action="/add-reservas" method="post">
+                <div class="cuadrante">
+                    <h3>Habitacion</h3>
+                    <hr>
+                    <img src="assets/hotel1.jpg" alt="imagen de habitacion" class="imagen1">
+                    <fieldset class="selecciones">
+                        <div class="casillas">
+                            <select name="tipo_habitacion">
+                                <option >Ordinaria</option>
+                                <option >Compartida</option>
+                            </select>
+                        </div>
+                        <div class="casillas">
+                            <select name="tipo_camas">
+                                <option>Cama King</option>
+                                <option>Cama Sencilla</option>
+                            </select>
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="cuadrante">
+                    <h3>Información de reserva</h3>
+                    <hr>
+                    <div class="check">
+                        <label for="check-in"></label>
+                        <p>check-in</p>
+                        <input type="date" id="check-in" name="check_in" placeholder="check-in">
+                    </div>
+                    <div class="check">
+                        <label for="check-out"></label>
+                        <p>check-out</p>
+                        <input type="date" id="check-out" name="check_out" placeholder="check-out">
+                    </div>
+                    <label class="input"><input type="checkbox" name="huespedes_adicionales">Huespedes
+                        adicionales</label>
+                    <div class="numhuespedes">
+                        <label for="numero" class="label">Numero de huespedes adicionales</label>
+                        <input type="number" id="numero" name="numero_huespedes" class="input"
+                            placeholder="Numero de huespedes adicionales">
+                    </div>
+                    <label class="input2"><input type="checkbox" name="huespedes_menores">Huespedes menores de
+                        edad</label>
+                </div>
+                <div class="cuadrante">
+                    <h3>Servicios adicionales</h3>
+                    <hr>
+                    <label class="input"><input type="checkbox" name="restaurante">Restaurante</label>
+                    <div class="restaurante">
+                        <label class="input"><input type="checkbox" name="desayuno">Desayuno</label>
+                        <label class="input"><input type="checkbox" name="almuerzo">Almuerzo</label>
+                        <label class="input"><input type="checkbox" name="cena">Cena</label>
+                    </div>
+                    <div class="servicios">
+                        <label class="input-servicios"><input type="checkbox" name="lavanderia">Lavanderia</label>
+                        <label class="input-servicios"><input type="checkbox" name="parqueadero">Parqueadero</label>
+                        <label class="input-servicios"><input type="checkbox" name="servicio_guia">Servicio de
+                            guia</label>
+                        <label class="input-servicios"><input type="checkbox" name="transporte_pueblo">Transporte al
+                            pueblo</label>
+                    </div>
+                </div>
+                <input type="submit" value="Reservar habitacion" class="enviar">
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

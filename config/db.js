@@ -1,6 +1,6 @@
 const sql = require('mssql');
 
-const dbConfig = {
+const config = {
     server: 'diseno1.database.windows.net',
     database: 'Hotel',
     user: 'bryamv',
@@ -11,7 +11,7 @@ const dbConfig = {
   };
   
 
-const pool = new sql.ConnectionPool(dbConfig);
+const pool = new sql.ConnectionPool(config);
 const dbConnect = pool.connect();
 
-module.exports = { pool, dbConnect };
+module.exports = { pool, dbConnect,config };
