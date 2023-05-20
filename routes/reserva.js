@@ -90,7 +90,6 @@ routerReserva.post('/', async (req, res) => {
                 res.status(404).send(`No hay habitaciones disponibles en el rango de fechas seleccionadas`)
             } else {
                 const id = disponibilidad.recordset[0].id;
-                console.log('Valido')
                 const result = await addReservas(req.body, id);
 
                 if (result) {
