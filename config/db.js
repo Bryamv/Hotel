@@ -2,7 +2,7 @@ const sql = require('mssql');
 
 const config = {
     server: 'diseno1.database.windows.net',
-    database: 'Hotel',
+    database: 'hotel_horizonte',
     user: 'bryamv',
     password: 'Theomars18',
     options: {
