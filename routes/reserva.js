@@ -282,7 +282,7 @@ async function reservaHabitaciones(reservaCliente, idsHabitaciones, fechaInicio,
         }
 
 
-        return habitacionReservada;
+        return codigoReserva;
     } catch (error) {
         console.error('Error al reservar habitación:', error);
         throw error;
