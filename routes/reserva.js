@@ -257,8 +257,8 @@ async function reservaHabitaciones(reservaCliente, idsHabitaciones, fechaInicio,
         let personas = reservaCliente.numero_huespedes
 
         for (const idHabitacion of idsHabitaciones) {
-            let fin = personas - acomododar;
-            for (let i = 0; i < fin; i++) {
+
+            for (let i = 0; i < personas - acomododar; i++) {
 
                 const query = `
             DECLARE @fecha_inicio datetime;
