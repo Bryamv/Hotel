@@ -265,7 +265,7 @@ async function reservaHabitaciones(reservaCliente, idsHabitaciones, fechaInicio,
                 const totalReservas = result.recordset[0].total_reservas;
 
                 console.log('Total de reservas:', totalReservas);
-                if (totalReservas < 4 && !(acomododar === personas)) {
+                if (totalReservas < 3 && !(acomododar === personas)) {
 
                     insertarReservaCompartida(reservaCliente, idHabitacion)
 
