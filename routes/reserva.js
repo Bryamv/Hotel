@@ -280,7 +280,9 @@ async function reservaHabitaciones(reservaCliente, idsHabitaciones, fechaInicio,
                 }
             }
         }
-
+        if (!(acomododar===personas)){
+            return false;
+        }
 
         return codigoReserva;
     } catch (error) {
