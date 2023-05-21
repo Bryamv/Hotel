@@ -257,8 +257,8 @@ async function reservaHabitaciones(reservaCliente, idsHabitaciones, fechaInicio,
         let personas = reservaCliente.numero_huespedes
 
         for (const idHabitacion of idsHabitaciones) {
-
-            for (let i = 0; i < personas - acomododar; i++) {
+            let fin =personas - acomododar
+            for (let i = 0; i < fin ; i++) {
 
                 const query = `
             DECLARE @fecha_inicio datetime;
@@ -285,7 +285,8 @@ async function reservaHabitaciones(reservaCliente, idsHabitaciones, fechaInicio,
 
                 const totalReservas = result.recordset[0].total_reservas;
 
-                //console.log('Total de reservas:', totalReservas);
+                console.log('Total de reservas:', totalReservas);
+                
                 if (totalReservas < 4 && !(acomododar === personas)) {
 
                     await insertarReservaCompartida(reservaCliente, idHabitacion, codigoReserva)
@@ -300,7 +301,7 @@ async function reservaHabitaciones(reservaCliente, idsHabitaciones, fechaInicio,
                 }
             }
         }
-        //console.log(`acomodadas ${acomododar} de ${personas}`);
+        console.log(`acomodadas ${acomododar} de ${personas}`);
 
         if (acomododar == personas) {
             return codigoReserva;
