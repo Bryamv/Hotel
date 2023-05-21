@@ -229,7 +229,7 @@ async function obtenerHabitacionesCompartidas() {
 
 async function reservaHabitaciones(reservaCliente, idsHabitaciones, fechaInicio, fechaFin) {
     try {
-
+        const codigoReserva = await generarValorUnico();
         await sql.connect(config);
         let habitacionReservada = null;
         let acomododar = 0;
@@ -267,7 +267,7 @@ async function reservaHabitaciones(reservaCliente, idsHabitaciones, fechaInicio,
                 console.log('Total de reservas:', totalReservas);
                 if (totalReservas < 3    && !(acomododar === personas)) {
 
-                    insertarReservaCompartida(reservaCliente, idHabitacion)
+                    insertarReservaCompartida(reservaCliente, idHabitacion,codigoReserva)
 
 
                     acomododar++;
@@ -292,10 +292,10 @@ async function reservaHabitaciones(reservaCliente, idsHabitaciones, fechaInicio,
 
 
 
-async function insertarReservaCompartida(reservaCliente, idHabitacion) {
+async function insertarReservaCompartida(reservaCliente, idHabitacion,codigoReserva) {
     try {
         // Generar un valor único para el código de reserva
-        const codigoReserva = await generarValorUnico();
+        
 
         // Conectarse a la base de datos
         await sql.connect(config);
