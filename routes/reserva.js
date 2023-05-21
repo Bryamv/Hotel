@@ -77,8 +77,8 @@ routerReserva.post('/', async (req, res) => {
         console.log(req.body);
         const reservaCliente = req.body;
         const tipo = req.body.tipo_habitacion;
-        reservaCliente.numero_huespedes = (parseInt(reservaCliente.numero_huespedes)+1).toString();
-        
+        reservaCliente.numero_huespedes = (parseInt(reservaCliente.numero_huespedes) + 1).toString();
+
         if (tipo === "Ordinaria") {
 
             const disponibilidad = await consultarCamasDisponibles(reservaCliente);
@@ -97,6 +97,7 @@ routerReserva.post('/', async (req, res) => {
         } else if (tipo === "Compartida") {
             // Verificar si se acomodaron todas las personas
             const reservacompartidas = await reservaHabitaciones(reservaCliente, await obtenerHabitacionesCompartidas(), reservaCliente.check_in, reservaCliente.check_out);
+
             if (reservacompartidas) {
                 res.status(200).send(`Reserva realizada exitosamente codigo de reserva # ${reservacompartidas}`)
             } else {
@@ -227,15 +228,34 @@ async function obtenerHabitacionesCompartidas() {
     }
 }
 // Fin de la función para obtener los IDs de las habitaciones compartidas
+async function revertirInsert(codigoReserva) {
+    try {
+        await sql.connect(config);
 
+        // Realizar la lógica para revertir el insert en la base de datos
+        const query = `
+        DELETE FROM reserva_compartida
+        WHERE  codigo_reserva = '${codigoReserva}';
+      `;
+
+        const pool = await sql.connect(config);
+        const request = pool.request();
+
+        await request.query(query);
+        await sql.close();
+    } catch (error) {
+        console.error('Error al revertir insert:', error);
+        throw error;
+    }
+}
 async function reservaHabitaciones(reservaCliente, idsHabitaciones, fechaInicio, fechaFin) {
     try {
         const codigoReserva = await generarValorUnico();
         await sql.connect(config);
-        let habitacionReservada = null;
+
         let acomododar = 0;
         let personas = reservaCliente.numero_huespedes
-        console.log(idsHabitaciones)
+
         for (const idHabitacion of idsHabitaciones) {
             let fin = personas - acomododar;
             for (let i = 0; i < fin; i++) {
@@ -265,10 +285,10 @@ async function reservaHabitaciones(reservaCliente, idsHabitaciones, fechaInicio,
 
                 const totalReservas = result.recordset[0].total_reservas;
 
-                console.log('Total de reservas:', totalReservas);
-                if (totalReservas < 3    && !(acomododar === personas)) {
+                //console.log('Total de reservas:', totalReservas);
+                if (totalReservas < 4 && !(acomododar === personas)) {
 
-                    insertarReservaCompartida(reservaCliente, idHabitacion,codigoReserva)
+                    await insertarReservaCompartida(reservaCliente, idHabitacion, codigoReserva)
 
 
                     acomododar++;
@@ -280,11 +300,16 @@ async function reservaHabitaciones(reservaCliente, idsHabitaciones, fechaInicio,
                 }
             }
         }
-        if (!(acomododar===personas)){
-            return false;
+        //console.log(`acomodadas ${acomododar} de ${personas}`);
+
+        if (acomododar == personas) {
+            return codigoReserva;
+
+        } else {
+            revertirInsert(codigoReserva);
+            return null;
         }
 
-        return codigoReserva;
     } catch (error) {
         console.error('Error al reservar habitación:', error);
         throw error;
@@ -295,10 +320,10 @@ async function reservaHabitaciones(reservaCliente, idsHabitaciones, fechaInicio,
 
 
 
-async function insertarReservaCompartida(reservaCliente, idHabitacion,codigoReserva) {
+async function insertarReservaCompartida(reservaCliente, idHabitacion, codigoReserva) {
     try {
         // Generar un valor único para el código de reserva
-        
+
 
         // Conectarse a la base de datos
         await sql.connect(config);
@@ -334,7 +359,7 @@ async function insertarReservaCompartida(reservaCliente, idHabitacion,codigoRese
         // Ejecutar la consulta
         await request.query(query);
 
-        console.log('Reserva compartida insertada correctamente y el id es: ', idHabitacion);
+        //console.log('Reserva compartida insertada correctamente y el id es: ', idHabitacion);
 
 
         // Cerrar la conexión a la base de datos
