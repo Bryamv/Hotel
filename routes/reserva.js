@@ -77,7 +77,8 @@ routerReserva.post('/', async (req, res) => {
         console.log(req.body);
         const reservaCliente = req.body;
         const tipo = req.body.tipo_habitacion;
-
+        reservaCliente.numero_huespedes = (parseInt(reservaCliente.numero_huespedes)+1).toString();
+        
         if (tipo === "Ordinaria") {
 
             const disponibilidad = await consultarCamasDisponibles(reservaCliente);
