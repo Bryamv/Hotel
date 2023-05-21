@@ -76,6 +76,7 @@ routerReserva.post('/', async (req, res) => {
     try {
         console.log(req.body);
         const reservaCliente = req.body;
+        reservaCliente.numero_huespedes= reservaCliente.numero_huespedes + 1;
         const tipo = req.body.tipo_habitacion;
 
         if (tipo === "Ordinaria") {
