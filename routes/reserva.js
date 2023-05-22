@@ -381,7 +381,7 @@ async function reservaHabitaciones(reservaCliente, idsHabitaciones, fechaInicio,
 
                 console.log('Total de reservas:', totalReservas);
                 
-                if (totalReservas < 4 && !(acomododar === personas)) {
+                if (totalReservas < 4 && !(acomododar == personas)) {
 
                     await insertarReservaCompartida(reservaCliente, idHabitacion, codigoReserva)
   
