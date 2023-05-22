@@ -4,6 +4,7 @@ body {
     font-family: Arial, sans-serif;
 }
 
+
 header {
     display: flex;
     justify-content: space-between;
@@ -140,7 +141,7 @@ hr {
     margin-bottom: 50px;
 }
 
-.select{
+.select {
     background-color: rgb(243, 255, 250);
     font-size: 15px;
     appearance: none;
@@ -155,7 +156,7 @@ hr {
     display: inline-block;
 }
 
-#fonthus{
+#fonthus {
     display: block;
     margin-top: 10px;
 }
@@ -166,7 +167,7 @@ hr {
     margin-bottom: 20px;
 }
 
-.input-correo{
+.input-correo {
     margin-top: 60px;
     margin-left: 180px;
     height: 20px;
@@ -174,7 +175,7 @@ hr {
     position: relative;
 }
 
-.input-correo input{
+.input-correo input {
     background-color: rgb(242, 253, 253);
     height: 100%;
     width: 100%;
@@ -183,14 +184,14 @@ hr {
     border-bottom: 2px solid #2789b6;
 }
 
-.input-correo input:focus ~ label,
-.input-correo input:valid ~ label{
+.input-correo input:focus~label,
+.input-correo input:valid~label {
     transform: translateY(-20px);
     font-size: 15px;
     bottom: 15px;
 }
 
-.input-correo label{
+.input-correo label {
     position: absolute;
     bottom: 0px;
     left: 8px;
@@ -198,7 +199,7 @@ hr {
     transition: all 0.3s ease;
 }
 
-.input-correo .underline{
+.input-correo .underline {
     position: absolute;
     content: "";
     height: 100%;
@@ -209,25 +210,25 @@ hr {
     transition: transform 0.3s ease;
 }
 
-.input-correo input:focus ~ .underline::before,
-.input-correo input:valid ~ .underline::before{
+.input-correo input:focus~.underline::before,
+.input-correo input:valid~.underline::before {
     transform: scaleX(1);
 }
 
 .input-servicios {
     display: flex;
     align-items: center;
-    margin: 10px 0px ;
-    margin-right: -80px;
+    margin: 10px 0px;
+    margin-right: 130px;
 }
 
 .label {
     padding-top: -20px;
-    margin-left: 180px;
+    flex-shrink: 0;
+    margin-right: 10px;
 }
 
 input[type="checkbox"] {
-    margin-left: 180px;
     position: relative;
     appearance: none;
     width: 70px;
@@ -239,11 +240,11 @@ input[type="checkbox"] {
     transition: 0.4s;
 }
 
-input[type="checkbox"]:checked{
+input[type="checkbox"]:checked {
     background: #4cc1f7;
 }
 
-input[type="checkbox"]::after{
+input[type="checkbox"]::after {
     position: absolute;
     content: "";
     width: 30px;
@@ -257,11 +258,11 @@ input[type="checkbox"]::after{
     transition: 0.4s;
 }
 
-input:checked[type="checkbox"]::after{
+input:checked[type="checkbox"]::after {
     left: 55%;
 }
 
-.input label{
+.input label {
     margin-top: -90px;
 }
 
@@ -270,7 +271,8 @@ input:checked[type="checkbox"]::after{
 }
 
 .input2 {
-    display: inline-block;
+    display: block;
+
 }
 
 .enviar {
@@ -297,26 +299,48 @@ fieldset {
     border: 0px solid transparent;
 }
 
-.casillas select {
-    width: 100%;
-}
-
 .transicion-desvanecer {
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.5s ease-in-out;
-    height: 0;
     overflow: hidden;
 }
 
 .transicion-desvanecer.mostrar {
     opacity: 1;
     visibility: visible;
-    height: auto;
 }
 
 .input-group {
+    margin-left: 180px;
     display: flex;
     align-items: center;
-    margin: 10px 0px ;
+}
+
+.container {
+    margin-left: 180px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(20px, 1fr));
+    align-items: center;
+  }
+
+#opadicionales {
+    display: block;
+    margin-left: 70px;
+}
+
+#numero{
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+#resadicionales{
+    display: flex;
+    margin-left: 80px;
+}
+
+.last{
+    display: flex;
+    align-items: center;
 }
