@@ -13,95 +13,97 @@
             <form action="/add-reservas" method="post">
                 <div class="cuadrante">
                     <h3>Habitacion</h3>
-                <hr>
-                <img src="assets/hotel1.jpg" alt="imagen de habitacion" class="imagen1">
-                <fieldset class="selecciones">
-                    <div class="casillas">
-                        <select class="select" name="tipo_habitacion">
-                            <option disabled selected>Tipo de reserva</option>
-                            <option>Ordinaria</option>
-                            <option>Uso compartido</option>
-                        </select>
-                    </div>
-                    <div class="casillas" style="margin-bottom: 0px;">
-                        <select class="select" name="tipo_camas">
-                            <option disabled selected>Tipo de habitación</option>
-                            <option>Cama doble</option>
-                            <option>Cama doble king</option>
-                        </select>
-                    </div>
-                </fieldset>
+                    <hr>
+                    <img src="assets/hotel1.jpg" alt="imagen de habitacion" class="imagen1">
+                    <fieldset class="selecciones">
+                        <div class="casillas">
+                            <select class="select" name="tipo_habitacion">
+                                <option disabled selected>Tipo de reserva</option>
+                                <option>Ordinaria</option>
+                                <option>Uso compartido</option>
+                            </select>
+                        </div>
+                        <div class="casillas" style="margin-bottom: 0px;">
+                            <select class="select" name="tipo_camas">
+                                <option disabled selected>Tipo de habitación</option>
+                                <option>Cama doble</option>
+                                <option>Cama doble king</option>
+                            </select>
+                        </div>
+                    </fieldset>
                 </div>
                 <div class="cuadrante">
                     <h3>Información de reserva</h3>
                     <hr>
                     <div class="input-correo">
-                        <input type="email" required>
+                        <input type="email" required name="mail">
                         <div class="underline"></div>
                         <label>Correo Electrónico</label>
-                    </div>    
-                    <div class="check">    
+                    </div>
+                    <div class="check">
                         <label for="check-in"></label>
                         <p>check-in</p>
-                        <input type="date" id="check-in" placeholder="check-in" class="select">    
-                    </div>   
-                    <div class="check">    
+                        <input type="date" id="check-in" placeholder="check-in" class="select" name="check_in">
+                    </div>
+                    <div class="check">
                         <label for="check-out"></label>
                         <p>check-out</p>
-                        <input type="date" id="check-out" placeholder="check-out" class="select">    
-                    </div>   
+                        <input type="date" id="check-out" placeholder="check-out" class="select" name="check_out">
+                    </div>
                     <label class="label" id="fonthus">Huespedes adicionales</label>
-                    <input type="checkbox" id="husadicionales" style="margin-left: 180px;">       
+                    <input type="checkbox" id="husadicionales" style="margin-left: 180px;" >
                     <div id="opadicionales" class="transicion-desvanecer" style="margin-top: 20px;">
                         <label for="numero" class="label">Numero de huespedes adicionales</label>
-                        <div class="input-group">                      
-                            <input type="number" id="numero" value="0" class="input" placeholder="Numero de huespedes adicionales" required>                       
+                        <div class="input-group">
+                            <input type="number" id="numero" value="0" class="input"
+                                placeholder="Numero de huespedes adicionales" name="numero_huespedes"  required>
                             <input type="checkbox">
-                            <label class="input2">Huespedes menores de edad</label>   
-                        </div>                 
-                    </div>    
+                            <label class="input2">Huespedes menores de edad</label>
+                        </div>
+                    </div>
                 </div>
                 <div class="cuadrante">
-                <h3>Servicios adicionales</h3>
-                <hr>
-                <div class="input-group">
-                    <input type="checkbox" id="restaurante">
-                    <label>Restaurante</label>
-                </div>
-                <div class="transicion-desvanecer" id="resadicionales" style="margin-left: 40px;">
+                    <h3>Servicios adicionales</h3>
+                    <hr>
                     <div class="input-group">
-                        <input type="checkbox">
-                        <label>Desayuno</label>
+                        <input type="checkbox" id="restaurante">
+                        <label>Restaurante</label>
                     </div>
-                    <div class="input-group">
-                        <input type="checkbox">
-                        <label>Almuerzo</label>
+                    <div class="transicion-desvanecer" id="resadicionales" style="margin-left: 40px;">
+                        <div class="input-group">
+                            <input type="checkbox" name="desayuno">
+                            <label>Desayuno</label>
+                        </div>
+                        <div class="input-group">
+                            <input type="checkbox" name="almuerzo">
+                            <label>Almuerzo</label>
+                        </div>
+                        <div class="input-group">
+                            <input type="checkbox" name="cena">
+                            <label>Cena</label>
+                        </div>
                     </div>
-                    <div class="input-group">
-                        <input type="checkbox">
-                        <label>Cena</label>
+                    <div class="input-servicios">
+                        <div class="input-servicios">
+                            <input type="checkbox" name="lavanderia">
+                            <label>Lavanderia</label >
+                        </div>
+                        <div class="input-servicios">
+                            <input type="checkbox" name="parqueadero">
+                            <label>Parqueadero</label>
+                        </div>
+                        <div class="input-servicios">
+                            <input type="checkbox" name="servicio_guia">
+                            <label>Servicio de guia</label>
+                        </div>
+                        <div class="input-servicios">
+                            <input type="checkbox" name="transporte_pueblo">
+                            <label>Transporte al pueblo</label>
+                        </div>
                     </div>
                 </div>
-                <div class="input-servicios">
-                    <div class="input-servicios">
-                        <input type="checkbox">
-                        <label>Lavanderia</label>
-                    </div>
-                    <div class="input-servicios">
-                        <input type="checkbox">
-                        <label>Parqueadero</label>
-                    </div>
-                    <div class="input-servicios">
-                        <input type="checkbox">
-                        <label>Servicio de guia</label>
-                    </div>
-                    <div class="input-servicios">
-                        <input type="checkbox">
-                        <label>Transporte al pueblo</label>
-                    </div>
-                </div>
-            </div>
-            <input type="submit" value="Reservar habitacion" class="enviar">
+                <input type="submit" value="Reservar habitacion" class="enviar">
+            </form>
         </div>
     </div>
 </body>
@@ -115,9 +117,9 @@
 
         checkboxPrincipal.addEventListener('change', function () {
             if (this.checked) {
-                checkboxesAdicionales.classList.add('mostrar');               
+                checkboxesAdicionales.classList.add('mostrar');
             } else {
-                checkboxesAdicionales.classList.remove('mostrar');               
+                checkboxesAdicionales.classList.remove('mostrar');
             }
         });
 
