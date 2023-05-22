@@ -8,13 +8,17 @@
 </head>
 
 <body>
+    <header>
+        <div class="logo">HOTEL EL HORIZONTE DEL LLANO</div>
+        <div class="menu-button">&#9776;</div>
+    </header>
     <div class="wrapper">
         <div class="main" style="border: 5px solid rgba(156,166,255);">
             <form action="/add-reservas" method="post">
                 <div class="cuadrante">
                     <h3>Habitacion</h3>
                     <hr>
-                    <img src="assets/hotel1.jpg" alt="imagen de habitacion" class="imagen1">
+                    <img src="assets/hotel1.jpg" alt="imagen de habitacion" class="imagen1" id="imagenreserva">
                     <fieldset class="selecciones">
                         <div class="casillas" style="margin-bottom: 50px;">
                             <select class="select" name="tipo_habitacion" onchange="toggleSelect2()" id="tiporeserva">
@@ -24,7 +28,7 @@
                             </select>
                         </div>
                         <div class="transicion-desvanecer" style="visibility: visible;" id="tipohabitacion">
-                            <select class="select" name="tipo_camas">
+                            <select class="select" name="tipo_camas" onchange="toggleSelect2()" id="tipohabitacionselect">
                                 <option disabled selected>Tipo de habitación</option>
                                 <option>Cama doble</option>
                                 <option>Cama sencilla</option>
@@ -48,7 +52,8 @@
                     <div class="check">
                         <label for="check-out"></label>
                         <p>check-out</p>
-                        <input type="date" id="check-out" placeholder="check-out" class="select" name="check_out" required>
+                        <input type="date" id="check-out" placeholder="check-out" class="select" name="check_out"
+                            required>
                     </div>
                     <div class="container">
                         <div style="margin-top: 15px;" class="transicion-desvanecer" id="opcionhusadicionales">
@@ -77,15 +82,15 @@
                         </div>
                         <div class="transicion-desvanecer" id="resadicionales">
                             <div class="input-servicios">
-                                <input type="checkbox" name="desayuno">
+                                <input type="checkbox" name="desayuno" id="desayuno">
                                 <label>Desayuno</label>
                             </div>
                             <div class="input-servicios">
-                                <input type="checkbox" name="almuerzo">
+                                <input type="checkbox" name="almuerzo" id="almuerzo">
                                 <label>Almuerzo</label>
                             </div>
                             <div class="input-servicios">
-                                <input type="checkbox" name="cena">
+                                <input type="checkbox" name="cena" id="cena">
                                 <label>Cena</label>
                             </div>
                         </div>
@@ -121,19 +126,26 @@
 
 <script>
 
-    function mostrar(checkboxPrincipal, checkboxesAdicionales) {
+    document.getElementById('husadicionales').addEventListener('change', function () {
+        if (this.checked) {
+            document.getElementById('opadicionales').classList.add('mostrar');
+        } else {
+            document.getElementById('opadicionales').classList.remove('mostrar');
+            document.getElementById('numero').value = 0;
+            document.getElementById('menores').checked = false;
+        }
+    });
 
-        checkboxPrincipal.addEventListener('change', function () {
-            if (this.checked) {
-                checkboxesAdicionales.classList.add('mostrar');
-            } else {
-                checkboxesAdicionales.classList.remove('mostrar');
-                document.getElementById('numero').value = 0;
-                document.getElementById('menores').checked = false;
-            }
-        });
-
-    }
+    document.getElementById('restaurante').addEventListener('change', function () {
+        if (this.checked) {
+            document.getElementById('resadicionales').classList.add('mostrar');
+        } else {
+            document.getElementById('resadicionales').classList.remove('mostrar');
+            document.getElementById('desayuno').checked = false;
+            document.getElementById('almuerzo').checked = false;
+            document.getElementById('cena').checked = false;
+        }
+    });
 
     function toggleSelect2() {
         var select1 = document.getElementById("tiporeserva");
@@ -142,14 +154,17 @@
         if (select1.value === "Ordinaria") {
             select2.classList.add('mostrar');
             document.getElementById("opcionhusadicionales").classList.remove('mostrar');
+            if (document.getElementById("tipohabitacionselect").value === "Cama doble") {
+                document.getElementById("imagenreserva").src = "assets/hotel1.jpg";
+            } else {
+                document.getElementById("imagenreserva").src = "assets/hotel3.jpg";
+            }
         } else {
             select2.classList.remove('mostrar');
             document.getElementById("opcionhusadicionales").classList.add('mostrar');
             select2.value = "Tipo de habitación";
+            document.getElementById("imagenreserva").src = "assets/hotel2.jpg";
         }
     }
-
-    mostrar(document.getElementById('husadicionales'), document.getElementById('opadicionales'));
-    mostrar(document.getElementById('restaurante'), document.getElementById('resadicionales'));
 
 </script>
