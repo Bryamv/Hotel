@@ -3,6 +3,7 @@ const routerReserva = express.Router();
 const sql = require('mssql');
 const { config, pool, dbConnect } = require('../config/db');
 const path = require('path');
+const { Console } = require('console');
 
 // Middleware para analizar los datos en formato JSON
 routerReserva.use(express.json());
@@ -31,15 +32,36 @@ async function generarValorUnico() {
 // Función para hacer una reserva
 async function addReservas(reservaCliente, id_habitacion) {
     try {
-
+        tipoServicio = createservicios(reservaCliente);
+        fechaFin = reservaCliente.check_out
+        fechaInicio = reservaCliente.check_in
+        if (reservaCliente.tipo_habitacion=='Ordinaria'){
+            personas = 1
+        }else{
+            personas = 2
+        }
+        for (let i = 0; i < tipoServicio.length; i++) {
+            const elemento = tipoServicio[i];
+            cupos = await ConfirmarCupos(fechaInicio, fechaFin, elemento,personas)
+            if (cupos == false){
+                return [0,elemento];
+            }
+            // Resto del código dentro del bucle
+        }
+        for (let i = 0; i < tipoServicio.length; i++) {
+            const elemento = tipoServicio[i];
+            await reservarCupos(fechaInicio, fechaFin, elemento,personas);
+            // Resto del código dentro del bucle
+        }
         // Insertar la reserva en la base de datos
         await sql.connect(config);
         const query = `
         -- INSERT en la tabla 'reservas'
         INSERT INTO reservas (codigo_reserva, id_cliente, id_habitacion, fecha_inicio, fecha_fin, num_personas, desayuno, almuerzo, cena, transporte, parqueadero, lavanderia, guia, descripcion)
         VALUES (@codigoReserva, @idCliente, @idHabitacion, @fechaInicio, @fechaFin, @numPersonas, @desayuno, @almuerzo, @cena, @transporte, @parqueadero, @lavanderia, @guia, @descripcion);
-  
+        
       `;
+
         const pool = await sql.connect(config);
         const request = pool.request();
         const codigo = await generarValorUnico();
@@ -52,16 +74,15 @@ async function addReservas(reservaCliente, id_habitacion) {
         request.input('desayuno', sql.Bit, reservaCliente.desayuno ? 1 : 0);
         request.input('almuerzo', sql.Bit, reservaCliente.almuerzo ? 1 : 0);
         request.input('cena', sql.Bit, reservaCliente.cena ? 1 : 0);
-        request.input('transporte', sql.Bit, reservaCliente.transporte ? 1 : 0);
+        request.input('transporte', sql.Bit, reservaCliente.transporte_pueblo ? 1 : 0);
         request.input('parqueadero', sql.Bit, reservaCliente.parqueadero ? 1 : 0);
         request.input('lavanderia', sql.Bit, reservaCliente.lavanderia ? 1 : 0);
         request.input('guia', sql.Bit, reservaCliente.servicio_guia ? 1 : 0);
         request.input('descripcion', sql.Text, reservaCliente.descripcion);
         await request.query(query);
-
         //console.log('Reserva realizada exitosamente.');
+        return [1,codigo];
 
-        return codigo
     } catch (error) {
         console.log('Error al hacer la reserva:', error);
         throw new Error('Error al hacer la reserva');
@@ -78,31 +99,42 @@ routerReserva.post('/', async (req, res) => {
         const reservaCliente = req.body;
         const tipo = req.body.tipo_habitacion;
         reservaCliente.numero_huespedes = (parseInt(reservaCliente.numero_huespedes) + 1).toString();
+        const paro = await paroarmado(reservaCliente.check_in,reservaCliente.check_out);
+        if (paro[0] == true){
+            if (tipo === "Ordinaria") {
 
-        if (tipo === "Ordinaria") {
+                const disponibilidad = await consultarCamasDisponibles(reservaCliente);
+                if (disponibilidad.recordset.length === 0) {
+                    res.status(404).send(`No hay habitaciones disponibles en el rango de fechas seleccionadas`)
+                } else {
+                    const id = disponibilidad.recordset[0].id;
+                    const result = await addReservas(req.body, id);
 
-            const disponibilidad = await consultarCamasDisponibles(reservaCliente);
-            if (disponibilidad.recordset.length === 0) {
-                res.status(404).send(`No hay habitaciones disponibles en el rango de fechas seleccionadas`)
-            } else {
-                const id = disponibilidad.recordset[0].id;
-                console.log('Valido')
-                const result = await addReservas(req.body, id);
+                    if (result[0]==1) {
+                        res.status(200).send(`Reserva realizada exitosamente codigo de reserva # ${result[1]}`)
+                    }else{
+                        res.status(404).send(`No hay suficientes cupos para el servicio de ${result[1]}`)
+                    }
+                }
 
-                if (result) {
-                    res.status(200).send(`Reserva realizada exitosamente codigo de reserva # ${result}`)
+            } else if (tipo === "Compartida") {
+                // Verificar si se acomodaron todas las personas
+                const reservacompartidas = await reservaHabitaciones(reservaCliente, await obtenerHabitacionesCompartidas(), reservaCliente.check_in, reservaCliente.check_out);
+
+                if (reservacompartidas[0]==1) {
+                    
+                    res.status(200).send(`Reserva realizada exitosamente codigo de reserva # ${reservacompartidas}`)
+                    
+                } else {
+                    if (reservacompartidas[1] != 0){
+                        res.status(400).send(`No hay suficientes cupos para el servicio de ${reservacompartidas[1]}`)
+                    }else{
+                    res.status(400).send('No se pueden acomodar a todas las personas en habitaciones compartidas');
+                    }
                 }
             }
-
-        } else if (tipo === "Compartida") {
-            // Verificar si se acomodaron todas las personas
-            const reservacompartidas = await reservaHabitaciones(reservaCliente, await obtenerHabitacionesCompartidas(), reservaCliente.check_in, reservaCliente.check_out);
-
-            if (reservacompartidas) {
-                res.status(200).send(`Reserva realizada exitosamente codigo de reserva # ${reservacompartidas}`)
-            } else {
-                res.status(400).send('No se pueden acomodar a todas las personas en habitaciones compartidas');
-            }
+        }else{
+            res.status(400).send(`No se puede realizar la reserva debido a un ${paro[0]}`);
         }
 
         //res.json(result);
@@ -119,9 +151,7 @@ routerReserva.post('/', async (req, res) => {
 // Función para consultar camas disponibles si el tipo de habitación es ordinaria
 async function consultarCamasDisponibles(reservaCliente) {
     try {
-
         await sql.connect(config);
-
         const query = `
         SELECT top 1 h.id, h.numero_habitacion, h.tipo, h.acomodacion, h.camas_disponibles, h.price, h.descripcion
         FROM habitaciones h
@@ -132,17 +162,12 @@ async function consultarCamasDisponibles(reservaCliente) {
         FROM reservas r
         WHERE (r.fecha_inicio <= @fechaFin AND r.fecha_fin >= @fechaInicio)
         )`;
-
         const pool = await sql.connect(config);
         const request = pool.request();
-
-
         request.input('tipoCama', sql.VarChar(50), reservaCliente.tipo_camas);
         request.input('fechaInicio', sql.DateTime, reservaCliente.check_in);
         request.input('fechaFin', sql.DateTime, reservaCliente.check_out);
-
         const result = await request.query(query);
-
         await sql.close();
 
         return result
@@ -153,41 +178,95 @@ async function consultarCamasDisponibles(reservaCliente) {
 }
 // Fin de la función consultar camas disponibles si el tipo de habitación es ordinaria
 
-
-//  Funcion para consultar si hay servicios disponibles en el rango de fechas seleccionadas
-async function reservarCupos(fechaInicio, fechaFin, tipoServicio) {
+//  Funcion para consultar si hay fechas ineactivas
+async function paroarmado(fechaInicio, fechaFin) {
     try {
         await sql.connect(config);
-
-        const transaction = new sql.Transaction();
-        await transaction.begin();
-
-        const request = new sql.Request(transaction);
-
-        // Verificar si hay cupos disponibles para todas las fechas
-        const query = `
-        SELECT 1
-        FROM CuposDisponibles
-        WHERE Fecha >= @FechaInicio AND Fecha <= @FechaFin
-        AND [${tipoServicio}] > 0
-      `;
-        const result = await request.query(query, { FechaInicio: fechaInicio, FechaFin: fechaFin });
-
+        
+            // Actualizar los cupos disponibles para cada fecha
+            const updateQuery = `
+            SELECT *
+            FROM fechas_inactivas
+            WHERE fecha_inicio <= @Fecha_fin
+            AND fecha_fin >= @Fecha_inicio;
+            ;
+            
+        `;
+        const pool = await sql.connect(config);
+        const request = pool.request();
+        request.input('Fecha_inicio', sql.DateTime, fechaInicio);
+        request.input('Fecha_fin', sql.DateTime, fechaFin);
+        result = await request.query(updateQuery);
         if (result.recordset.length === 0) {
-            throw new Error('No hay cupos disponibles para todas las fechas.');
+            return [true,true,true];
+
+        }else{
+            console.log("Hay un paro armado");
+            return [result.recordset[0].tipo];
         }
+        
+        
 
-        // Actualizar los cupos disponibles para cada fecha
-        const updateQuery = `
-        UPDATE CuposDisponibles
-        SET [${tipoServicio}] = [${tipoServicio}] - 1
-        WHERE Fecha >= @FechaInicio AND Fecha <= @FechaFin
-        AND [${tipoServicio}] > 0
-      `;
-        await request.query(updateQuery, { FechaInicio: fechaInicio, FechaFin: fechaFin });
+    } catch (error) {
+        console.error('No se pudo realizar la consulta de fechas inactivas:', error.message);
+    } finally {
+        sql.close();
+    }
+}
+//  Funcion para consultar si hay servicios disponibles en el rango de fechas seleccionadas
+async function reservarCupos(fechaInicio, fechaFin, tipoServicio, personas) {
+    try {
+        await sql.connect(config);
+        
+            // Actualizar los cupos disponibles para cada fecha
+            const updateQuery = `
+            UPDATE CuposDisponibles
+            SET [${tipoServicio}] = [${tipoServicio}] - @personas
+            WHERE Fecha >= @FechaInicio AND Fecha <= @FechaFin
+            
+        `;
+        const pool = await sql.connect(config);
+        const request = pool.request();
+        request.input('FechaInicio', sql.DateTime, fechaInicio);
+        request.input('FechaFin', sql.DateTime, fechaFin);
+        request.input('Personas', sql.Int, personas);
+        await request.query(updateQuery);
+        console.log('cupos exitosos.');
+        
 
-        await transaction.commit();
-        console.log('Reserva exitosa.');
+    } catch (error) {
+        if (transaction) {
+            await transaction.rollback();
+        }
+        console.error('No se pudo realizar la asignación de cupos:', error.message);
+    } finally {
+        sql.close();
+        return true
+    }
+}
+async function ConfirmarCupos(fechaInicio, fechaFin, tipoServicio, personas) {
+    try {
+        await sql.connect(config);
+                        // Verificar si hay cupos disponibles para todas las fechas
+            const query = `
+            SELECT 1
+            FROM CuposDisponibles
+            WHERE Fecha >= @FechaInicio 
+            AND Fecha <= @FechaFin
+            AND [${tipoServicio}] < @Personas
+        `;
+        const pool = await sql.connect(config);
+        const request = pool.request();
+        request.input('FechaInicio', sql.DateTime, fechaInicio);
+        request.input('FechaFin', sql.DateTime, fechaFin);
+        request.input('Personas', sql.Int, personas);
+        const result = await request.query(query);
+            if (result.recordset.length === 0) {
+                return true;
+            }else{
+                console.log("No alcanzó los cupos")
+                return false;               
+            }
     } catch (error) {
         if (transaction) {
             await transaction.rollback();
@@ -248,14 +327,29 @@ async function revertirInsert(codigoReserva) {
         throw error;
     }
 }
+function createservicios(reservaCliente) {
+    const tipoServicio = [];
+        const arregloservicios = ['Desayuno','Almuerzo','Cena','Lavanderia','Parqueadero','guia','Transporte']
+        let contador = 0;
+        const arregloOriginal = [reservaCliente.desayuno, reservaCliente.almuerzo, reservaCliente.cena, reservaCliente.lavanderia, reservaCliente.parqueadero, reservaCliente.servicio_guia, reservaCliente.transporte_pueblo];
+        // Recorrer el arreglo original y verificar si el bit está encendido (bit on)
+        arregloOriginal.forEach((bit) => {
+        if (bit === 'on') {
+            // Si el bit está encendido (bit on), agregar 1 al arreglo resultado
+            tipoServicio.push(arregloservicios[contador]);
+        }
+        contador=contador+1;
+        });
+    return tipoServicio
+}
 async function reservaHabitaciones(reservaCliente, idsHabitaciones, fechaInicio, fechaFin) {
     try {
         const codigoReserva = await generarValorUnico();
         await sql.connect(config);
 
         let acomododar = 0;
-        let personas = reservaCliente.numero_huespedes
-
+        let personas = reservaCliente.numero_huespedes;
+        const tipoServicio = createservicios(reservaCliente);
         for (const idHabitacion of idsHabitaciones) {
             let fin =personas - acomododar
             for (let i = 0; i < fin ; i++) {
@@ -290,7 +384,7 @@ async function reservaHabitaciones(reservaCliente, idsHabitaciones, fechaInicio,
                 if (totalReservas < 4 && !(acomododar === personas)) {
 
                     await insertarReservaCompartida(reservaCliente, idHabitacion, codigoReserva)
-
+  
 
                     acomododar++;
 
@@ -303,12 +397,26 @@ async function reservaHabitaciones(reservaCliente, idsHabitaciones, fechaInicio,
         }
         console.log(`acomodadas ${acomododar} de ${personas}`);
 
-        if (acomododar == personas) {
-            return codigoReserva;
-
+        if (acomododar == personas  ) {
+            for (let i = 0; i < tipoServicio.length; i++) {
+                const elemento = tipoServicio[i];
+                cupos = await ConfirmarCupos(fechaInicio, fechaFin, elemento,personas)
+                if (cupos == false){
+                    revertirInsert(codigoReserva);
+                    return [0,elemento];
+                }
+                // Resto del código dentro del bucle
+            }
+            for (let i = 0; i < tipoServicio.length; i++) {
+                const elemento = tipoServicio[i];
+                await reservarCupos(fechaInicio, fechaFin, elemento,personas);
+                // Resto del código dentro del bucle
+            }
+            return [1,codigoReserva];
+            
         } else {
             revertirInsert(codigoReserva);
-            return null;
+            return [0,0];
         }
 
     } catch (error) {
@@ -338,7 +446,7 @@ async function insertarReservaCompartida(reservaCliente, idHabitacion, codigoRes
           INSERT INTO reserva_compartida (codigo_reserva, numero_habitacion, id_cliente, fecha_inicio, fecha_fin, desayuno, almuerzo, cena, transporte, parqueadero, lavanderia, guia, descipcion)
           VALUES (@codigoReserva, @idHabitacion, @idCliente, @fechaInicio, @fechaFin, @desayuno, @almuerzo, @cena, @transporte, @parqueadero, @lavanderia, @guia, @descripcion)
       `;
-
+        
         // Definir los parámetros de la consulta
         request.input('codigoReserva', sql.VarChar(100), codigoReserva);
         request.input('idHabitacion', sql.Int, idHabitacion);
@@ -349,7 +457,7 @@ async function insertarReservaCompartida(reservaCliente, idHabitacion, codigoRes
         request.input('desayuno', sql.Bit, reservaCliente.desayuno ? 1 : 0);
         request.input('almuerzo', sql.Bit, reservaCliente.almuerzo ? 1 : 0);
         request.input('cena', sql.Bit, reservaCliente.cena ? 1 : 0);
-        request.input('transporte', sql.Bit, reservaCliente.transporte ? 1 : 0);
+        request.input('transporte', sql.Bit, reservaCliente.transporte_pueblo ? 1 : 0);
         request.input('parqueadero', sql.Bit, reservaCliente.parqueadero ? 1 : 0);
         request.input('lavanderia', sql.Bit, reservaCliente.lavanderia ? 1 : 0);
         request.input('guia', sql.Bit, reservaCliente.servicio_guia ? 1 : 0);
