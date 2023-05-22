@@ -61,14 +61,6 @@ header {
     padding: 20px;
 }
 
-.btn {
-    padding: 10px;
-    color: white;
-    font-weight: bold;
-    background: blue;
-    cursor: pointer;
-}
-
 .item img {
     border: 5px solid rgba(156, 166, 255);
 }
@@ -292,6 +284,24 @@ input:checked[type="checkbox"]::after {
 
 .enviar:hover {
     background: rgb(29, 28, 28);
+    transform: scale(1.1);
+}
+
+.enviarindex {
+    width: 40%;
+    padding: 15px 0;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background: blue;
+    border: none;
+    border-radius: 5px;
+    transition: 0.5s all;
+    cursor: pointer;
+}
+
+.enviarindex:hover {
+    background: #0099ff;
     transform: scale(1.1);
 }
 
