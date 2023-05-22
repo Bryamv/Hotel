@@ -100,6 +100,7 @@ routerReserva.post('/', async (req, res) => {
         const tipo = req.body.tipo_habitacion;
         reservaCliente.numero_huespedes = (parseInt(reservaCliente.numero_huespedes) + 1).toString();
         const paro = await paroarmado(reservaCliente.check_in, reservaCliente.check_out);
+        console.log(paro)
         if (paro[0] == true) {
             if (tipo === "Ordinaria") {
 
@@ -184,11 +185,10 @@ async function consultarCamasDisponibles(reservaCliente) {
 async function paroarmado(fechaInicio, fechaFin) {
     try {
         await sql.connect(config);
-
         // Actualizar los cupos disponibles para cada fecha
         const updateQuery = `
             SELECT *
-            FROM DiasNoDisponible
+            FROM fechas_inactivas
             WHERE fecha_inicio <= @Fecha_fin
             AND fecha_fin >= @Fecha_inicio;
             ;
@@ -198,13 +198,16 @@ async function paroarmado(fechaInicio, fechaFin) {
         const request = pool.request();
         request.input('Fecha_inicio', sql.Date, fechaInicio);
         request.input('Fecha_fin', sql.Date, fechaFin);
+        
         result = await request.query(updateQuery);
+
         if (result.recordset.length === 0) {
             return [true, true, true];
 
         } else {
             console.log("Hay un paro armado");
             return [result.recordset[0].tipo];
+
         }
 
 
