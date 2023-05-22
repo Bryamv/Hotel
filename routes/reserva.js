@@ -68,8 +68,8 @@ async function addReservas(reservaCliente, id_habitacion) {
         request.input('codigoReserva', sql.VarChar(100), codigo);
         request.input('idHabitacion', sql.Int, id_habitacion);
         request.input('correo', sql.VarChar(100), reservaCliente.mail);
-        request.input('fechaInicio', sql.DateTime, reservaCliente.check_in);
-        request.input('fechaFin', sql.DateTime, reservaCliente.check_out);
+        request.input('fechaInicio', sql.Date, reservaCliente.check_in);
+        request.input('fechaFin', sql.Date, reservaCliente.check_out);
         request.input('numPersonas', sql.Int, reservaCliente.numero_huespedes);
         request.input('desayuno', sql.Bit, reservaCliente.desayuno ? 1 : 0);
         request.input('almuerzo', sql.Bit, reservaCliente.almuerzo ? 1 : 0);
@@ -166,8 +166,8 @@ async function consultarCamasDisponibles(reservaCliente) {
         const pool = await sql.connect(config);
         const request = pool.request();
         request.input('tipoCama', sql.VarChar(50), reservaCliente.tipo_camas);
-        request.input('fechaInicio', sql.DateTime, reservaCliente.check_in);
-        request.input('fechaFin', sql.DateTime, reservaCliente.check_out);
+        request.input('fechaInicio', sql.Date, reservaCliente.check_in);
+        request.input('fechaFin', sql.Date, reservaCliente.check_out);
         const result = await request.query(query);
 
         await sql.close();
@@ -188,7 +188,7 @@ async function paroarmado(fechaInicio, fechaFin) {
         // Actualizar los cupos disponibles para cada fecha
         const updateQuery = `
             SELECT *
-            FROM fechas_inactivas
+            FROM DiasNoDisponible
             WHERE fecha_inicio <= @Fecha_fin
             AND fecha_fin >= @Fecha_inicio;
             ;
@@ -196,8 +196,8 @@ async function paroarmado(fechaInicio, fechaFin) {
         `;
         const pool = await sql.connect(config);
         const request = pool.request();
-        request.input('Fecha_inicio', sql.DateTime, fechaInicio);
-        request.input('Fecha_fin', sql.DateTime, fechaFin);
+        request.input('Fecha_inicio', sql.Date, fechaInicio);
+        request.input('Fecha_fin', sql.Date, fechaFin);
         result = await request.query(updateQuery);
         if (result.recordset.length === 0) {
             return [true, true, true];
@@ -229,8 +229,8 @@ async function reservarCupos(fechaInicio, fechaFin, tipoServicio, personas) {
         `;
         const pool = await sql.connect(config);
         const request = pool.request();
-        request.input('FechaInicio', sql.DateTime, fechaInicio);
-        request.input('FechaFin', sql.DateTime, fechaFin);
+        request.input('FechaInicio', sql.Date, fechaInicio);
+        request.input('FechaFin', sql.Date, fechaFin);
         request.input('Personas', sql.Int, personas);
         await request.query(updateQuery);
         console.log('cupos exitosos.');
@@ -259,8 +259,8 @@ async function ConfirmarCupos(fechaInicio, fechaFin, tipoServicio, personas) {
         `;
         const pool = await sql.connect(config);
         const request = pool.request();
-        request.input('FechaInicio', sql.DateTime, fechaInicio);
-        request.input('FechaFin', sql.DateTime, fechaFin);
+        request.input('FechaInicio', sql.Date, fechaInicio);
+        request.input('FechaFin', sql.Date, fechaFin);
         request.input('Personas', sql.Int, personas);
         const result = await request.query(query);
         if (result.recordset.length === 0) {
@@ -357,8 +357,8 @@ async function reservaHabitaciones(reservaCliente, idsHabitaciones, fechaInicio,
             for (let i = 0; i < fin; i++) {
 
                 const query = `
-            DECLARE @fecha_inicio datetime;
-            DECLARE @fecha_fin datetime;
+            DECLARE @fecha_inicio Date;
+            DECLARE @fecha_fin Date;
             DECLARE @numero_habitacion int;
   
             SET @fecha_inicio = '${fechaInicio}'; -- Fecha de inicio del rango
@@ -453,8 +453,8 @@ async function insertarReservaCompartida(reservaCliente, idHabitacion, codigoRes
         request.input('codigoReserva', sql.VarChar(100), codigoReserva);
         request.input('idHabitacion', sql.Int, idHabitacion);
         request.input('correo', sql.VarChar(100), reservaCliente.mail);
-        request.input('fechaInicio', sql.DateTime, reservaCliente.check_in);
-        request.input('fechaFin', sql.DateTime, reservaCliente.check_out);
+        request.input('fechaInicio', sql.Date, reservaCliente.check_in);
+        request.input('fechaFin', sql.Date, reservaCliente.check_out);
         request.input('numPersonas', sql.Int, reservaCliente.numero_huespedes);
         request.input('desayuno', sql.Bit, reservaCliente.desayuno ? 1 : 0);
         request.input('almuerzo', sql.Bit, reservaCliente.almuerzo ? 1 : 0);
