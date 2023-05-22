@@ -302,7 +302,6 @@ async function reservaHabitaciones(reservaCliente, idsHabitaciones, fechaInicio,
             }
         }
         console.log(`acomodadas ${acomododar} de ${personas}`);
-        console.log(!(acomododar == personas));
         if (acomododar == personas) {
             return codigoReserva;
 
