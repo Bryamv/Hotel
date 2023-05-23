@@ -18,10 +18,10 @@ routerReserva.post('/', async (req, res) => {
     console.log(reservaCliente);
     const disponibilidad = await consultarCamasDisponibles(reservaCliente);
     console.log(disponibilidad)
-    if (disponibilidad.recordset.length === 0) {
+    if (!(disponibilidad)) {
         res.status(404).send(`No hay habitaciones disponibles en el rango de fechas seleccionadas`)
     } else {
-        res.status(200).send("Hay camas Disponibles")
+        res.status(200).send("Hay camas disponibles")
     }
 
 });
@@ -189,7 +189,7 @@ async function consultarCamasDisponibles(reservaCliente) {
         return result
     } catch (error) {
         console.error(error);
-        throw new Error('Error en la consulta de camas disponibles');
+         new Error('Error en la consulta de camas disponibles');
     }
 }
 // Fin de la función consultar camas disponibles si el tipo de habitación es ordinaria

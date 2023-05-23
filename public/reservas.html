@@ -188,8 +188,9 @@
 
 </html>
 
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+
     //verificar
     async function verificarDisponibilidad() {
         // Obtener los valores seleccionados del formulario
@@ -219,11 +220,21 @@
         if (response.ok) {
             // Obtener la respuesta como texto
             var disponibilidad = await response.text();
+            Swal.fire(
+                'Exito',
+                disponibilidad,
+                'success'
+            )
             // Mostrar la disponibilidad en el formulario
-            document.getElementById("disponibilidad").innerHTML = disponibilidad;
+            //document.getElementById("disponibilidad").innerHTML = disponibilidad;
         } else {
             // Mostrar un mensaje de error
-            alert(response.status + " " + response.statusText);
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'No hay disponibilidad para las fechas seleccionadas'
+            })
+            //alert(response.status + " " + response.statusText);
         }
     }
 
