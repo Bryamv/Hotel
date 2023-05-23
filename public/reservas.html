@@ -61,8 +61,9 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <input type="submit" class="enviar" value="Buscar disponibilidad"
-                                        style="width: 270px; margin: 20% 0 0 0;"></input>
+                                    <input onclick="verificarDisponibilidad()" type="button" class="enviar"
+                                        value="Buscar disponibilidad" style="width: 270px; margin: 20% 0 0 0;"></input>
+                                    <div id="disponibilidad"></div>
                                 </td>
                             </tr>
                         </tbody>
@@ -110,7 +111,7 @@
                             <label>Transporte al pueblo</label>
                         </div>
                     </div>
-                </div>               
+                </div>
         </div>
         <div class="inforeserva">
             <h2 style="margin-left: 5%;">Información de reserva</h2>
@@ -124,7 +125,8 @@
                         <label>Correo Electrónico</label>
                     </div>
                 </div>
-                <div style="margin-top: 5%; display: inline-grid; justify-items: center;" class="transicion-desvanecer" id="opcionhusadicionales">
+                <div style="margin-top: 5%; display: inline-grid; justify-items: center;" class="transicion-desvanecer"
+                    id="opcionhusadicionales">
                     <label class="label" id="fonthus">Huespedes adicionales</label>
                     <input type="checkbox" id="husadicionales">
                 </div>
@@ -251,7 +253,7 @@
             }
         }
     }
-    
+
 
     function nuevoshuespedes() {
         var n = parseInt(document.getElementById('numero').value);
@@ -263,7 +265,7 @@
         // Generar y agregar las nuevas secciones
         for (var i = 2; i <= n + 1; i++) {
             var seccion = document.createElement('div');
-            seccion.innerHTML = '<h4 style="margin-left: 8%;">Información del huesped ' + i + '</h4><div class="container" style="margin: 10px 0px 10px 5.5%;"><div class="input-text"><input type="text" required name="tipoID'+i+'" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Tipo ID</label></div><div class="input-text"><input type="number" required name="numID'+i+'" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Número de identificación</label></div><div class="input-text"><input type="text" required name="nacionalidad'+i+'" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Nacionalidad</label></div></div><div class="container" style="margin: 10px 0px 10px 5.5%;"><div class="input-text"><input type="text" required name="origen'+i+'" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Origen</label></div><div class="input-text"><input type="text" required name="nombres'+i+'" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Nombres</label></div><div class="input-text"><input type="text" required name="apellidos'+i+'" placeholder=" " onchange="cambio()"><div class="underline"></div><label>apellidos</label></div></div>';
+            seccion.innerHTML = '<h4 style="margin-left: 8%;">Información del huesped ' + i + '</h4><div class="container" style="margin: 10px 0px 10px 5.5%;"><div class="input-text"><input type="text" required name="tipoID' + i + '" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Tipo ID</label></div><div class="input-text"><input type="number" required name="numID' + i + '" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Número de identificación</label></div><div class="input-text"><input type="text" required name="nacionalidad' + i + '" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Nacionalidad</label></div></div><div class="container" style="margin: 10px 0px 10px 5.5%;"><div class="input-text"><input type="text" required name="origen' + i + '" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Origen</label></div><div class="input-text"><input type="text" required name="nombres' + i + '" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Nombres</label></div><div class="input-text"><input type="text" required name="apellidos' + i + '" placeholder=" " onchange="cambio()"><div class="underline"></div><label>apellidos</label></div></div>';
             contenedorSecciones.appendChild(seccion);
         }
     }
