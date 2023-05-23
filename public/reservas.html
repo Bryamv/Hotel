@@ -18,65 +18,62 @@
                 <div class="cuadrante">
                     <h3>Habitacion</h3>
                     <hr>
-                    <img src="assets/hotel1.jpg" alt="imagen de habitacion" class="imagen1" id="imagenreserva">
-                    <fieldset class="selecciones">
-                        <div class="casillas" style="margin-bottom: 50px;">
-                            <select class="select" name="tipo_habitacion" onchange="toggleSelect2()" id="tiporeserva">
-                                <option disabled selected>Tipo de reserva</option>
-                                <option>Ordinaria</option>
-                                <option>Uso compartido</option>
-                            </select>
-                        </div>
-                        <div class="transicion-desvanecer" style="visibility: visible;" id="tipohabitacion">
-                            <select class="select" name="tipo_camas" onchange="toggleSelect2()" id="tipohabitacionselect">
-                                <option disabled selected>Tipo de habitación</option>
-                                <option>Cama doble</option>
-                                <option>Cama sencilla</option>
-                            </select>
-                        </div>
-                    </fieldset>
-                </div>
-                <div class="cuadrante">
-                    <h3>Información de reserva</h3>
-                    <hr>
-                    <div class="input-correo">
-                        <input type="email" required name="mail">
-                        <div class="underline"></div>
-                        <label>Correo Electrónico</label>
-                    </div>
-                    <div class="check">
-                        <label for="check-in"></label>
-                        <p>check-in</p>
-                        <input type="date" id="check-in" placeholder="check-in" class="select" name="check_in" required>
-                    </div>
-                    <div class="check">
-                        <label for="check-out"></label>
-                        <p>check-out</p>
-                        <input type="date" id="check-out" placeholder="check-out" class="select" name="check_out"
-                            required>
-                    </div>
-                    <div class="container">
-                        <div style="margin-top: 15px;" class="transicion-desvanecer" id="opcionhusadicionales">
-                            <label class="label" id="fonthus">Huespedes adicionales</label>
-                            <input type="checkbox" id="husadicionales">
-                        </div>
-                        <div id="opadicionales" class="transicion-desvanecer" style="display: block;">
-                            <label for="numero" class="label">Numero de huespedes adicionales</label>
-                            <div>
-                                <input type="number" id="numero" value="0" placeholder="Numero de huespedes adicionales"
-                                    name="numero_huespedes" required>
-                                <label class="input2">Huespedes menores de edad</label>
-                                <input type="checkbox" name="menores" id="menores">
+                    <table style="margin: -30px auto 0px auto;">
+                        <tbody>
+                            <tr style="margin-left: 60px;">
+                                <td>
+                                    <img src="assets/hotel1.jpg" alt="imagen de habitacion" id="imagenreserva"
+                                        class="imagen1">
+                                </td>
+                                <td>
+                                    <fieldset class="selecciones">
+                                        <div class="casillas">
+                                            <select class="select" name="tipo_habitacion" onchange="toggleSelect2()"
+                                                id="tiporeserva">
+                                                <option disabled selected>Tipo de reserva</option>
+                                                <option>Ordinaria</option>
+                                                <option>Uso compartido</option>
+                                            </select>
+                                        </div>
+                                        <div class="transicion-desvanecer" style="visibility: visible;"
+                                            id="tipohabitacion">
+                                            <select class="select" name="tipo_camas" onchange="toggleSelect2()"
+                                                id="tipohabitacionselect">
+                                                <option disabled selected>Tipo de habitación</option>
+                                                <option>Cama doble</option>
+                                                <option>Cama sencilla</option>
+                                            </select>
+                                        </div>
+                                    </fieldset>
+                                </td>
+                                <td style="width: 311px;">
+                                    <div class="check">
+                                        <label for="check-in"></label>
+                                        <p>check-in</p>
+                                        <input type="date" id="check-in" placeholder="check-in" class="select"
+                                            name="check_in" required>
+                                    </div>
+                                    <div class="check">
+                                        <label for="check-out"></label>
+                                        <p>check-out</p>
+                                        <input type="date" id="check-out" placeholder="check-out" class="select"
+                                            name="check_out" required>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="submit" class="enviar" value="Buscar disponibilidad"
+                                        style="width: 270px; margin: 20% 0 0 0;"></input>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="cuadrante">
                     <h3>Servicios adicionales</h3>
                     <hr>
                     <div style="display: flex; margin-left: -80px;">
-                        <div class="input-group">
+                        <div class="input-group" style="margin: 0px 50px 0px 180px;">
                             <input type="checkbox" id="restaurante">
                             <label>Restaurante</label>
                         </div>
@@ -113,9 +110,75 @@
                             <label>Transporte al pueblo</label>
                         </div>
                     </div>
-                </div>
+                </div>               
         </div>
-        <input type="submit" value="Reservar habitacion" class="enviar">
+        <div class="inforeserva">
+            <h2 style="margin-left: 5%;">Información de reserva</h2>
+            <hr>
+            <div class="container" style="margin-left: 5%;">
+                <div>
+                    <h4 style="margin-left: 8%;">Información del huesped principal</h4>
+                    <div class="input-text" style="margin-top: 3%;">
+                        <input type="email" required name="mail1" placeholder=" " onchange="cambio()">
+                        <div class="underline"></div>
+                        <label>Correo Electrónico</label>
+                    </div>
+                </div>
+                <div style="margin-top: 5%; display: inline-grid; justify-items: center;" class="transicion-desvanecer" id="opcionhusadicionales">
+                    <label class="label" id="fonthus">Huespedes adicionales</label>
+                    <input type="checkbox" id="husadicionales">
+                </div>
+                <div id="opadicionales" class="transicion-desvanecer" style="display: block;">
+                    <label for="numero" class="label">Numero de huespedes adicionales</label>
+                    <div>
+                        <input type="number" id="numero" value="0" placeholder="Numero de huespedes adicionales"
+                            name="numero_huespedes" onchange="nuevoshuespedes()" required>
+                        <label class="input2">Huespedes menores de edad</label>
+                        <input type="checkbox" name="menores" id="menores">
+
+                    </div>
+                </div>
+            </div>
+            <div class="container" style="margin: 10px 0px 10px 5.5%;">
+                <div class="input-text">
+                    <input type="text" required name="tipoID1" placeholder=" " onchange="cambio()">
+                    <div class="underline"></div>
+                    <label>Tipo ID</label>
+                </div>
+                <div class="input-text">
+                    <input type="number" required name="numID1" placeholder=" " onchange="cambio()">
+                    <div class="underline"></div>
+                    <label>Número de identificación</label>
+                </div>
+                <div class="input-text">
+                    <input type="text" required name="nacionalidad1" placeholder=" " onchange="cambio()">
+                    <div class="underline"></div>
+                    <label>Nacionalidad</label>
+                </div>
+            </div>
+            <div class="container" style="margin: 10px 0px 10px 5.5%;">
+                <div class="input-text">
+                    <input type="text" required name="origen1" placeholder=" " onchange="cambio()">
+                    <div class="underline"></div>
+                    <label>Origen</label>
+                </div>
+                <div class="input-text">
+                    <input type="text" required name="nombres1" placeholder=" " onchange="cambio()">
+                    <div class="underline"></div>
+                    <label>Nombres</label>
+                </div>
+                <div class="input-text">
+                    <input type="text" required name="apellidos1" placeholder=" " onchange="cambio()">
+                    <div class="underline"></div>
+                    <label>apellidos</label>
+                </div>
+            </div>
+            <div class="huespedesadicionales" id="huespedesadicionales">
+
+            </div>
+            <input type="submit" value="Reservar habitacion" class="enviar">
+        </div>
+
         </form>
     </div>
     </div>
@@ -133,6 +196,7 @@
             document.getElementById('opadicionales').classList.remove('mostrar');
             document.getElementById('numero').value = 0;
             document.getElementById('menores').checked = false;
+            nuevoshuespedes()
         }
     });
 
@@ -164,6 +228,43 @@
             document.getElementById("opcionhusadicionales").classList.add('mostrar');
             select2.value = "Tipo de habitación";
             document.getElementById("imagenreserva").src = "assets/hotel2.jpg";
+        }
+    }
+
+    function cambio() {
+        var inputCorreos = document.querySelectorAll('.input-text input');
+
+        for (var i = 0; i < inputCorreos.length; i++) {
+            inputCorreos[i].addEventListener('input', function () {
+                var input = this;
+                var label = input.parentNode.querySelector('label');
+                if (input.value !== '') {
+                    label.classList.add('subir');
+                } else {
+                    label.classList.remove('subir');
+                }
+            });
+
+            if (inputCorreos[i].value !== '') {
+                var label = inputCorreos[i].parentNode.querySelector('label');
+                label.classList.add('subir');
+            }
+        }
+    }
+    
+
+    function nuevoshuespedes() {
+        var n = parseInt(document.getElementById('numero').value);
+        var contenedorSecciones = document.getElementById('huespedesadicionales');
+
+        // Eliminar secciones existentes
+        contenedorSecciones.innerHTML = '';
+
+        // Generar y agregar las nuevas secciones
+        for (var i = 2; i <= n + 1; i++) {
+            var seccion = document.createElement('div');
+            seccion.innerHTML = '<h4 style="margin-left: 8%;">Información del huesped ' + i + '</h4><div class="container" style="margin: 10px 0px 10px 5.5%;"><div class="input-text"><input type="text" required name="tipoID'+i+'" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Tipo ID</label></div><div class="input-text"><input type="number" required name="numID'+i+'" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Número de identificación</label></div><div class="input-text"><input type="text" required name="nacionalidad'+i+'" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Nacionalidad</label></div></div><div class="container" style="margin: 10px 0px 10px 5.5%;"><div class="input-text"><input type="text" required name="origen'+i+'" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Origen</label></div><div class="input-text"><input type="text" required name="nombres'+i+'" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Nombres</label></div><div class="input-text"><input type="text" required name="apellidos'+i+'" placeholder=" " onchange="cambio()"><div class="underline"></div><label>apellidos</label></div></div>';
+            contenedorSecciones.appendChild(seccion);
         }
     }
 
