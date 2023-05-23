@@ -12,9 +12,10 @@ routerReserva.use(express.json());
 routerReserva.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'reservas.html'));
 });
-
+//aqui desarollar la logica para verificar la disponibilidad de las habitaciones
 routerReserva.post('/', async (req, res) => {
-    console.log(req.body);
+    
+    console.log("entro a verificar");
 });
 
 

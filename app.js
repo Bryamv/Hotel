@@ -3,12 +3,13 @@ const sql = require('mssql');
 const { pool, dbConnect } = require('./config/db');
 const routerReserva = require('./routes/reserva');
 const path = require('path');
+
 //constante de port
 const app = express();
 const port = process.env.PORT || 3000;
 //middleware
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 // Configurar la ruta por defecto a public/index.html
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));

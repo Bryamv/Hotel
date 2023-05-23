@@ -199,16 +199,20 @@
         var checkOut = document.getElementById("check-out").value;
 
         // Crear un objeto FormData y agregar los parámetros
-        var formData = new FormData();
-        formData.append("tipo_reserva", tipoReserva);
-        formData.append("tipo_habitacion", tipoHabitacion);
-        formData.append("check_in", checkIn);
-        formData.append("check_out", checkOut);
-        console.log(formData);
+        const data = {
+            tipo_reserva: tipoReserva,
+            tipo_habitacion: tipoHabitacion,
+            check_in: checkIn,
+            check_out: checkOut
+        };
+        console.log(data);
         // Realizar la solicitud utilizando fetch con async/await
         var response = await fetch("/verificar", {
             method: "POST",
-            body: JSON.stringify(formData),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data),
         });
 
         // Verificar si la respuesta fue exitosa
