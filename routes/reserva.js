@@ -14,8 +14,16 @@ routerReserva.get('/', (req, res) => {
 });
 //aqui desarollar la logica para verificar la disponibilidad de las habitaciones
 routerReserva.post('/', async (req, res) => {
-    
-    console.log("entro a verificar");
+    const reservaCliente = req.body;
+    console.log(reservaCliente);
+    const disponibilidad = await consultarCamasDisponibles(reservaCliente);
+    console.log(disponibilidad)
+    if (disponibilidad.recordset.length === 0) {
+        res.status(404).send(`No hay habitaciones disponibles en el rango de fechas seleccionadas`)
+    } else {
+        res.status(200).send("Hay camas Disponibles")
+    }
+
 });
 
 

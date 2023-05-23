@@ -201,7 +201,7 @@
         // Crear un objeto FormData y agregar los parámetros
         const data = {
             tipo_reserva: tipoReserva,
-            tipo_habitacion: tipoHabitacion,
+            tipo_camas: tipoHabitacion,
             check_in: checkIn,
             check_out: checkOut
         };
@@ -223,7 +223,7 @@
             document.getElementById("disponibilidad").innerHTML = disponibilidad;
         } else {
             // Mostrar un mensaje de error
-            alert("Error al verificar disponibilidad");
+            alert(response.status + " " + response.statusText);
         }
     }
 
