@@ -9,11 +9,11 @@ const { Console } = require('console');
 routerReserva.use(express.json());
 
 // Ruta para cargar el formulario add-reserva.html
-routerReserva.get('/', (req, res) => {
+routerReserva.get('/add-reservas', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'reservas.html'));
 });
 //aqui desarollar la logica para verificar la disponibilidad de las habitaciones
-routerReserva.post('/', async (req, res) => {
+routerReserva.post('/verificar', async (req, res) => {
     const reservaCliente = req.body;
     console.log(reservaCliente);
     const disponibilidad = await consultarCamasDisponibles(reservaCliente);
@@ -106,7 +106,7 @@ async function addReservas(reservaCliente, id_habitacion) {
 // Fin de función para hacer reserva
 
 // Ruta post para obtener los datos del formulario de reservas en la ruta add-reservas
-routerReserva.post('/', async (req, res) => {
+routerReserva.post('/add-reservas', async (req, res) => {
     try {
         console.log(req.body);
         const reservaCliente = req.body;
