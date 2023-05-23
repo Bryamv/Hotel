@@ -13,6 +13,10 @@ routerReserva.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'public', 'reservas.html'));
 });
 
+routerReserva.post('/', async (req, res) => {
+    console.log(req.body);
+});
+
 
 // Función para generar valor unico para el codigo de reserva
 async function generarValorUnico() {

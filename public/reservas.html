@@ -190,7 +190,40 @@
 
 
 <script>
+    //verificar
+    async function verificarDisponibilidad() {
+        // Obtener los valores seleccionados del formulario
+        var tipoReserva = document.getElementById("tiporeserva").value;
+        var tipoHabitacion = document.getElementById("tipohabitacionselect").value;
+        var checkIn = document.getElementById("check-in").value;
+        var checkOut = document.getElementById("check-out").value;
 
+        // Crear un objeto FormData y agregar los parámetros
+        var formData = new FormData();
+        formData.append("tipo_reserva", tipoReserva);
+        formData.append("tipo_habitacion", tipoHabitacion);
+        formData.append("check_in", checkIn);
+        formData.append("check_out", checkOut);
+        console.log(formData);
+        // Realizar la solicitud utilizando fetch con async/await
+        var response = await fetch("/verificar", {
+            method: "POST",
+            body: JSON.stringify(formData),
+        });
+
+        // Verificar si la respuesta fue exitosa
+        if (response.ok) {
+            // Obtener la respuesta como texto
+            var disponibilidad = await response.text();
+            // Mostrar la disponibilidad en el formulario
+            document.getElementById("disponibilidad").innerHTML = disponibilidad;
+        } else {
+            // Mostrar un mensaje de error
+            alert("Error al verificar disponibilidad");
+        }
+    }
+
+    // fin verificar
     document.getElementById('husadicionales').addEventListener('change', function () {
         if (this.checked) {
             document.getElementById('opadicionales').classList.add('mostrar');

@@ -19,6 +19,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Usar el enrutador de reserva
 app.use('/add-reservas', routerReserva);
+app.use('/verificar', routerReserva);
 
 app.listen(port, () => {
   console.log(`Servidor Express iniciado en el puerto ${port}`);
