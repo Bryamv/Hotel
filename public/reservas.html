@@ -14,7 +14,7 @@
     </header>
     <div class="wrapper">
         <div class="main" style="border: 5px solid rgba(156,166,255);">
-            <form action="/add-reservas" method="post">
+            <form onsubmit="enviar_reserva()"  id="reservaaaa">
                 <div class="cuadrante">
                     <h3>Habitacion</h3>
                     <hr>
@@ -27,19 +27,19 @@
                                 </td>
                                 <td>
                                     <fieldset class="selecciones">
-                                        <div class="casillas">
-                                            <select class="select" name="tipo_habitacion" onchange="toggleSelect2()"
-                                                id="tiporeserva">
-                                                <option disabled selected>Tipo de reserva</option>
+                                        <div class="casillas"> 
+                                            <select class="select" name="tipo_habitacion"  onchange="toggleSelect2()" required
+                                                id="tiporeserva" > 
+                                                <option disabled selected value = "">Tipo de reserva</option>
                                                 <option>Ordinaria</option>
                                                 <option>Uso compartido</option>
                                             </select>
                                         </div>
                                         <div class="transicion-desvanecer" style="visibility: visible;"
                                             id="tipohabitacion">
-                                            <select class="select" name="tipo_camas" onchange="toggleSelect2()"
+                                            <select class="select" name="tipo_camas" onchange="toggleSelect2()" 
                                                 id="tipohabitacionselect">
-                                                <option disabled selected>Tipo de habitación</option>
+                                                <option disabled selected value = "">Tipo de habitación</option>
                                                 <option>Cama doble</option>
                                                 <option>Cama sencilla</option>
                                             </select>
@@ -175,10 +175,23 @@
                     <label>apellidos</label>
                 </div>
             </div>
+            <div class="container" style="margin: 10px 0px 10px 5.5%;">
+                <div class="input-text">
+                    <input type="text" required name="MetododePago" id="metodopago" placeholder=" " onchange="cambio()">
+                    <div class="underline"></div>
+                    <label>Método de pago</label>
+                </div>
+                <div class="input-text">
+                    <input type="text" required name="Numerodecuenta" id="numcuenta" placeholder=" " onchange="cambio()">
+                    <div class="underline"></div>
+                    <label>Número de Cuenta</label>
+                </div>
+
+            </div>
             <div class="huespedesadicionales" id="huespedesadicionales">
 
             </div>
-            <input type="submit" value="Reservar habitacion" class="enviar">
+            <input  type="submit" value="Reservar habitacion" class="enviar" >
         </div>
 
         </form>
@@ -188,9 +201,71 @@
 
 </html>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.serializejson/2.9.0/jquery.serializejson.min.js"></script>
+<script>
+async function enviar_reserva() {
+        // Obtener los valores seleccionados del formulario
+                // Realizar la solicitud utilizando fetch con async/await
+                event.preventDefault();
+                var formElement = document.getElementById("reservaaaa");
+                var formData = new FormData(formElement);
+                var jsonData = {};
+                for (var [key, value] of formData.entries()) {
+                    jsonData[key] = value;
+                }
+                
+                var n = parseInt(document.getElementById('numero').value);
+                if (document.getElementById('tiporeserva').value == 'Ordinaria' && document.getElementById('tipohabitacionselect').value == 'Cama doble' ){
+                    n = 1
+                }
+                for (var i = 2; i <= n + 1; i++) {
+                    jsonData['tipoID'+i]=document.getElementById('tipoID'+i).value
+                    jsonData['numID'+i]=document.getElementById('numID'+i).value
+                    jsonData['nacionalidad'+i]=document.getElementById('nacionalidad'+i).value
+                    jsonData['origen'+i]=document.getElementById('origen'+i).value
+                    jsonData['nombres'+i]=document.getElementById('nombres'+i).value
+                    jsonData['apellidos'+i]=document.getElementById('apellidos'+i).value
+                
+                 }
+                 console.log(jsonData)
+                var jsonString = JSON.stringify(jsonData);
+                console.log(jsonString);
+                var response = await fetch("/add-reservas", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: jsonString,
+                });
+                console.log(response)
+                var disponibilidad = await response.text();
+                // Verificar si la respuesta fue exitosa
+                if (response.ok) {
+                    // Obtener la respuesta como texto
+                    
+                    console.log(disponibilidad)
+                    Swal.fire(
+                        'Exito',
+                        disponibilidad,
+                        'success'
+                    )
+                    // Mostrar la disponibilidad en el formulario
+                    //document.getElementById("disponibilidad").innerHTML = disponibilidad;
+                } else {
+                    // Mostrar un mensaje de error
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: disponibilidad
+                    })
+                    //alert(response.status + " " + response.statusText);
+                }
+                
+            }
+    
     //verificar
     async function verificarDisponibilidad() {
         // Obtener los valores seleccionados del formulario
@@ -198,43 +273,59 @@
         var tipoHabitacion = document.getElementById("tipohabitacionselect").value;
         var checkIn = document.getElementById("check-in").value;
         var checkOut = document.getElementById("check-out").value;
-
-        // Crear un objeto FormData y agregar los parámetros
-        const data = {
-            tipo_reserva: tipoReserva,
-            tipo_camas: tipoHabitacion,
-            check_in: checkIn,
-            check_out: checkOut
-        };
-        console.log(data);
-        // Realizar la solicitud utilizando fetch con async/await
-        var response = await fetch("/verificar", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data),
-        });
-
-        // Verificar si la respuesta fue exitosa
-        if (response.ok) {
-            // Obtener la respuesta como texto
-            var disponibilidad = await response.text();
-            Swal.fire(
-                'Exito',
-                disponibilidad,
-                'success'
-            )
-            // Mostrar la disponibilidad en el formulario
-            //document.getElementById("disponibilidad").innerHTML = disponibilidad;
-        } else {
-            // Mostrar un mensaje de error
+        console.log(checkIn)
+        if (checkIn == '' || checkOut == ''){
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'No hay disponibilidad para las fechas seleccionadas'
+                text: 'Digite un rango de fechas'
+            })        
+        }else{
+            if (tipoReserva == '' || (tipoHabitacion== '' && tipoReserva=='Ordinaria')){
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Digite el tipo de reserva y/o habitación'
             })
-            //alert(response.status + " " + response.statusText);
+            }else{
+                // Crear un objeto FormData y agregar los parámetros
+                const data = {
+                    tipo_habitacion: tipoReserva,
+                    tipo_camas: tipoHabitacion,
+                    check_in: checkIn,
+                    check_out: checkOut
+                };
+                console.log(data);
+                // Realizar la solicitud utilizando fetch con async/await
+                var response = await fetch("/verificar", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data),
+                });
+                // Verificar si la respuesta fue exitosa
+                if (response.ok) {
+                    // Obtener la respuesta como texto
+                    var disponibilidad = await response.text();
+                    console.log(disponibilidad)
+                    Swal.fire(
+                        'Exito',
+                        disponibilidad,
+                        'success'
+                    )
+                    // Mostrar la disponibilidad en el formulario
+                    //document.getElementById("disponibilidad").innerHTML = disponibilidad;
+                } else {
+                    // Mostrar un mensaje de error
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'No hay disponibilidad para las fechas seleccionadas'
+                    })
+                    //alert(response.status + " " + response.statusText);
+                }
+            }
         }
     }
 
@@ -264,16 +355,21 @@
     function toggleSelect2() {
         var select1 = document.getElementById("tiporeserva");
         var select2 = document.getElementById("tipohabitacion");
-
+        const c = document.getElementById("tipohabitacionselect")
         if (select1.value === "Ordinaria") {
+            console.log("entró al condicional")
+            c.required = true
             select2.classList.add('mostrar');
             document.getElementById("opcionhusadicionales").classList.remove('mostrar');
             if (document.getElementById("tipohabitacionselect").value === "Cama doble") {
+                nuevoshuespedes2(2);
                 document.getElementById("imagenreserva").src = "assets/hotel1.jpg";
             } else {
+                nuevoshuespedes2(1);
                 document.getElementById("imagenreserva").src = "assets/hotel3.jpg";
             }
         } else {
+            c.required = false
             select2.classList.remove('mostrar');
             document.getElementById("opcionhusadicionales").classList.add('mostrar');
             select2.value = "Tipo de habitación";
@@ -302,7 +398,18 @@
         }
     }
 
+    function nuevoshuespedes2(n) {
+        var contenedorSecciones = document.getElementById('huespedesadicionales');
+        // Eliminar secciones existentes
+        contenedorSecciones.innerHTML = '';
 
+        // Generar y agregar las nuevas secciones
+        for (var i = 2; i <= n; i++) {
+            var seccion = document.createElement('div');
+            seccion.innerHTML = '<h4 style="margin-left: 8%;">Información del huesped ' + i + '</h4><div class="container" style="margin: 10px 0px 10px 5.5%;"><div class="input-text"><input type="text" required name="tipoID' + i + '" id="tipoID' + i + '" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Tipo ID</label></div><div class="input-text"><input type="number" required name="numID' + i + '" id="numID' + i + '" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Número de identificación</label></div><div class="input-text"><input type="text" required name="nacionalidad' + i + '" id="nacionalidad' + i + '" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Nacionalidad</label></div></div><div class="container" style="margin: 10px 0px 10px 5.5%;"><div class="input-text"><input type="text" required name="origen' + i + '" id="origen' + i + '" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Origen</label></div><div class="input-text"><input type="text" required name="nombres' + i + '" id="nombres' + i + '" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Nombres</label></div><div class="input-text"><input type="text" required name="apellidos' + i + '" id="apellidos' + i + '" placeholder=" " onchange="cambio()"><div class="underline"></div><label>apellidos</label></div></div>';
+            contenedorSecciones.appendChild(seccion);
+        }
+    }
     function nuevoshuespedes() {
         var n = parseInt(document.getElementById('numero').value);
         var contenedorSecciones = document.getElementById('huespedesadicionales');
@@ -313,7 +420,7 @@
         // Generar y agregar las nuevas secciones
         for (var i = 2; i <= n + 1; i++) {
             var seccion = document.createElement('div');
-            seccion.innerHTML = '<h4 style="margin-left: 8%;">Información del huesped ' + i + '</h4><div class="container" style="margin: 10px 0px 10px 5.5%;"><div class="input-text"><input type="text" required name="tipoID' + i + '" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Tipo ID</label></div><div class="input-text"><input type="number" required name="numID' + i + '" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Número de identificación</label></div><div class="input-text"><input type="text" required name="nacionalidad' + i + '" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Nacionalidad</label></div></div><div class="container" style="margin: 10px 0px 10px 5.5%;"><div class="input-text"><input type="text" required name="origen' + i + '" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Origen</label></div><div class="input-text"><input type="text" required name="nombres' + i + '" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Nombres</label></div><div class="input-text"><input type="text" required name="apellidos' + i + '" placeholder=" " onchange="cambio()"><div class="underline"></div><label>apellidos</label></div></div>';
+            seccion.innerHTML = '<h4 style="margin-left: 8%;">Información del huesped ' + i + '</h4><div class="container" style="margin: 10px 0px 10px 5.5%;"><div class="input-text"><input type="text" required name="tipoID' + i + '" id="tipoID' + i + '" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Tipo ID</label></div><div class="input-text"><input type="number" required name="numID' + i + '" id="numID' + i + '" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Número de identificación</label></div><div class="input-text"><input type="text" required name="nacionalidad' + i + '" id="nacionalidad' + i + '" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Nacionalidad</label></div></div><div class="container" style="margin: 10px 0px 10px 5.5%;"><div class="input-text"><input type="text" required name="origen' + i + '" id="origen' + i + '" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Origen</label></div><div class="input-text"><input type="text" required name="nombres' + i + '" id="nombres' + i + '" placeholder=" " onchange="cambio()"><div class="underline"></div><label>Nombres</label></div><div class="input-text"><input type="text" required name="apellidos' + i + '" id="apellidos' + i + '" placeholder=" " onchange="cambio()"><div class="underline"></div><label>apellidos</label></div></div>';
             contenedorSecciones.appendChild(seccion);
         }
     }
